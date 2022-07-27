@@ -1,0 +1,100 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              07/27/2022 18:05:35 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\Include;.\Include\driver;.\Incl
+                    -ude\types;.\Include\utils;.\Include\security) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst) TABS(2) 
+                    -OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "Common.h"
+   5          #include "Delay.h"
+   6          
+   7          #include "uart0.h"
+   8          #include "stdint.h"
+   9          #include "typecon.h"
+  10          #include "crc.h"
+  11          #include "eeprom.h"
+  12          #include "I2C.h"
+  13          
+  14          #include <stdlib.h>
+  15          #include <string.h>
+  16          
+  17          void setup(void){
+  18   1        char buf[] = "Finance M";
+  19   1        _init_UART0_(2400);
+  20   1        writeToEEPROM(14081 + 1, buf[0]);
+  21   1        Timer0_Delay1ms(100);
+  22   1        
+  23   1        writeToEEPROM(14081 + 2, buf[1]);
+  24   1        Timer0_Delay1ms(100);
+  25   1        
+  26   1        writeToEEPROM(14081 + 3, buf[2]);
+  27   1        Timer0_Delay1ms(100);
+  28   1        
+  29   1        writeToEEPROM(14081 + 4, buf[3]);
+  30   1        Timer0_Delay1ms(100);
+  31   1        
+  32   1        writeToEEPROM(14081 + 5, buf[4]);
+  33   1        Timer0_Delay1ms(100);
+  34   1        
+  35   1        writeToEEPROM(14081 + 6, buf[5]);
+  36   1        Timer0_Delay1ms(100);
+  37   1        
+  38   1        writeToEEPROM(14081 + 7, buf[6]);
+  39   1        Timer0_Delay1ms(100);
+  40   1        
+  41   1        writeToEEPROM(14081 + 8, buf[7]);
+  42   1        Timer0_Delay1ms(100);
+  43   1        
+  44   1        writeToEEPROM(14081 + 9, buf[8]);
+  45   1        Timer0_Delay1ms(100);
+  46   1      }
+  47          
+  48          void getDataFromPC(void){
+  49   1        
+  50   1      }
+  51          
+  52          void sendDataToPC(void){
+  53   1        unsigned char pktdata;
+C51 COMPILER V9.60.0.0   MAIN                                                              07/27/2022 18:05:35 PAGE 2   
+
+  54   1        static unsigned int *temp = 0;
+  55   1        uart0WriteChar('~');
+  56   1        pktdata = readFromEEPROM(temp);
+  57   1        uart0WriteChar(pktdata);    
+  58   1        uart0WriteChar('>');
+  59   1        temp++;
+  60   1      }
+  61          
+  62          void main(void){
+  63   1        int i = 0;
+  64   1        setup();
+  65   1        while(1){
+  66   2          for(i = 0; i < 10 ; i++)
+  67   2            getDataFromPC(); //Reading 10 bytes from PC-HOST
+  68   2          //for(i = 0; i < 10 ; i++)
+  69   2          {
+  70   3            //sendDataToPC(); //Sending 10 bytes to PC-HOST
+  71   3          }
+  72   2        }
+  73   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    280    ----
+   CONSTANT SIZE    =     10    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      3      12
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

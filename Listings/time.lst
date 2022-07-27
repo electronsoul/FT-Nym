@@ -1,0 +1,54 @@
+C51 COMPILER V9.60.0.0   TIME                                                              07/27/2022 15:20:07 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE TIME
+OBJECT MODULE PLACED IN .\Objects\time.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE time.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\Include;.\Include\driver;.\Incl
+                    -ude\types;.\Include\utils;.\Include\security) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\Listings\time.lst) TABS(2) 
+                    -OBJECT(.\Objects\time.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "Common.h"
+   5          #include "Delay.h"
+   6          #include "time.h"
+   7          
+   8          /*
+   9          Based on timer3
+  10          */
+  11          
+  12          static unsigned long currentmils = 0;
+  13          
+  14          void timer3_ISR(void) interrupt 16{
+  15   1        clr_TF3;
+  16   1        currentmils++;
+  17   1      }
+  18          
+  19          void _init_millis_(void){
+  20   1        EA = 1;
+  21   1        set_ET3;
+  22   1        RL3 = LOBYTE(65536 - 16050);
+  23   1        RH3 = HIBYTE(65535 - 16050);
+  24   1        set_TR3;
+  25   1      }
+  26          
+  27          unsigned long millis(void){
+  28   1        return currentmils;
+  29   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     57    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

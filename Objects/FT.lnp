@@ -1,0 +1,11 @@
+".\Objects\STARTUP.obj",
+".\Objects\main.obj",
+".\Objects\Delay.obj",
+".\Objects\uart0.obj",
+".\Objects\typecon.obj",
+".\Objects\time.obj",
+".\Objects\eeprom.obj",
+".\Objects\i2c.obj" 
+TO ".\Objects\FT" 
+PRINT(".\Listings\FT.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

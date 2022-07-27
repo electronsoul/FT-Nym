@@ -1,0 +1,112 @@
+C51 COMPILER V9.60.0.0   UART0                                                             07/27/2022 15:20:07 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE UART0
+OBJECT MODULE PLACED IN .\Objects\uart0.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE uart0.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\Include;.\Include\driver;.\Inc
+                    -lude\types;.\Include\utils;.\Include\security) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\Listings\uart0.lst) TABS(2
+                    -) OBJECT(.\Objects\uart0.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "Common.h"
+   3          #include "Delay.h"
+   4          #include "SFR_Macro.h"
+   5          #include "Function_define.h"
+   6          #include "uart0.h"
+   7          #include <string.h>
+   8          
+   9          #define buflen 6
+  10          static char inputDataBuffer;
+  11          static unsigned long pm = 0, cm = 0;
+  12          int flag = 0;
+  13          
+  14          void uart0_ISR(void) interrupt 4{
+  15   1        if(RI == 1){
+  16   2          RI = 0;
+  17   2            inputDataBuffer = SBUF;
+  18   2            flag = 1;
+  19   2        }
+  20   1      }
+  21          
+  22          int uart0available(void){
+  23   1        return flag;
+  24   1      }
+  25          void _init_UART0_(long baud)  {   
+  26   1        long reloadValue = (256 - (16000000/(32*baud)));
+  27   1        EA = 1;
+  28   1        //ES = 1;
+  29   1      
+  30   1        /*Set GPIO pins for UART*/
+  31   1        P06_Quasi_Mode;   
+  32   1        P07_Quasi_Mode;
+  33   1        
+  34   1        /*Configure UART*/
+  35   1        SCON = (0x70);  //UART0 Mode1,SM2=1,REN=1
+  36   1        /*Configure Timer 1*/
+  37   1        clr_ET1;        //Disable timer 1 interrupts
+  38   1        TMOD |= (0x20); //Timer1 Gate=0,TimerMode,Mode1(8bit_auto-reload)
+  39   1        set_T1M;        //system clock as Timer1 src
+  40   1        //clr_BRCK;     //select Timer1 as UART0 Clk Src
+  41   1        //clr_SMOD;     //UART0 Double Rate Enable
+  42   1        //set_SMOD0;    //framing error flag access enable
+  43   1        TH1 = reloadValue;    //Timer 1 reload value
+  44   1        /*Enable Timer 1*/
+  45   1        set_TR1;  
+  46   1      }
+  47          
+  48          
+  49          void uart0WriteChar(char userData) { 
+  50   1        TI = 0;
+  51   1        SBUF = userData;
+  52   1        while(TI==0);
+  53   1      } 
+C51 COMPILER V9.60.0.0   UART0                                                             07/27/2022 15:20:07 PAGE 2   
+
+  54          
+  55          char uart0ReadChar(void) {
+  56   1        char inputData;
+  57   1        while (!RI);
+  58   1        inputData = SBUF;
+  59   1        RI = 0;
+  60   1        return inputData;
+  61   1        
+  62   1        /*
+  63   1        if(flag == 1){
+  64   1          flag = 0;
+  65   1          return inputDataBuffer;
+  66   1        }
+  67   1        return '\0'; 
+  68   1        */
+  69   1      }
+  70          char* uart0RX(int bytes){
+  71   1        char str[10];
+  72   1        int i = 0;
+  73   1        for (i = 0; i < bytes; i++){
+  74   2          str[i] = uart0ReadChar();
+  75   2        }
+  76   1        str[i] = '\0';
+  77   1        return str;
+  78   1      }
+  79          
+  80          void uart0TX(char *_data){
+  81   1        while(*_data != NULL){
+  82   2          uart0WriteChar(*_data);
+  83   2          _data++;
+  84   2        }
+  85   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    207    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     11      18
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
