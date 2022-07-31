@@ -94,7 +94,7 @@ for _itr_ in range(0, len(para[:9])):
             if rxDataCRC == expectedcrc:
                 print("CRC result Success") ##
             else:
-                print("CRC result Success") ##
+                print("CRC result Fail") ##
             rate = 1 / (temp - previous)
             previous = temp
             print("Reception Speed: ", rate, "Bytes/Sec")
