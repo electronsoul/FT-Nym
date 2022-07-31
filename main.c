@@ -17,33 +17,7 @@
 void setup(void){
 	char buf[] = "Finance M";
 	_init_UART0_(2400);
-	writeToEEPROM(14081 + 1, buf[0]);
-	Timer0_Delay1ms(100);
-	
-	writeToEEPROM(14081 + 2, buf[1]);
-	Timer0_Delay1ms(100);
-	
-  writeToEEPROM(14081 + 3, buf[2]);
-	Timer0_Delay1ms(100);
-	
-  writeToEEPROM(14081 + 4, buf[3]);
-	Timer0_Delay1ms(100);
-	
-  writeToEEPROM(14081 + 5, buf[4]);
-	Timer0_Delay1ms(100);
-	
-  writeToEEPROM(14081 + 6, buf[5]);
-	Timer0_Delay1ms(100);
-	
-	writeToEEPROM(14081 + 7, buf[6]);
-	Timer0_Delay1ms(100);
-	
-	writeToEEPROM(14081 + 8, buf[7]);
-	Timer0_Delay1ms(100);
-	
-	writeToEEPROM(14081 + 9, buf[8]);
-	Timer0_Delay1ms(100);
-}
+	}
 
 void getDataFromPC(void){
 	
